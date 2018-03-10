@@ -40,7 +40,7 @@ addVec (x1, y1) (x2, y2) = (x1 + x2, y1 + y2)
 -- example: a `subVec` b == (3, -4)
 -- implement this function using negVec and addVec
 subVec :: Vec -> Vec -> Vec
-subVec (x1, y1) (x2, y2) = addVec (x1, y1) (negVec (x2, y2))
+subVec v1 v2 = addVec v1 (negVec v2:t )
 
 
 -- distance computes the distance between two vectors
