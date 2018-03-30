@@ -76,4 +76,5 @@ testDivideList =
   divideList 3 [] == ([] :: [[Int]])
 
 divideList :: Int -> [a] -> [[a]]
-divideList = toBeImplemented
+divideList _ [] = []
+divideList n x = (take n x) : divideList n (drop n x)
