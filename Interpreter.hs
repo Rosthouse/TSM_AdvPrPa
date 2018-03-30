@@ -75,7 +75,7 @@ data Command
     = AssiCmd Ident ArithExpr
     | CpsCmd [Command]
     | WhileCmd BoolExpr Command
-    -- | IfCmd BoolExpr Command Command
+    | CondCmd BoolExpr Command Command
     deriving Show
 
 interCmd :: Command -> State -> State
@@ -93,13 +93,10 @@ interCmd (WhileCmd guard repetend) state
     | otherwise = state
        where state' = interCmd repetend state
 
-{-
-interCmd (IfCmd branch ifBranch elseBranch) state  
-    | evalBExpr branch state = 
-        interCmd CpsCmd (ifBranch) state
-    | otherwise state =
-        interCmd CpsCmmd  elseBranch state
--}
+
+interCmd (CondCmd branch ifBranch elseBranch) state  
+    | evalBExpr branch state = interCmd ifBranch state
+    | otherwise = interCmd elseBranch state
 
 state175 "m" = 17
 state175 "n" = 5
