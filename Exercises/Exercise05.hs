@@ -60,7 +60,8 @@ testHalve =
   halve []            == ([], [] :: [Int])
 
 halve :: [a] -> ([a], [a])
-halve = toBeImplemented
+halve [] =( [], []) 
+halve a =( (removeEachSnd a) , (removeEachSnd (tail a)))
 
 -- divideList divides a list into chunks of length n each, except
 -- of the last chunk, which might be shorter
