@@ -20,7 +20,11 @@ data ArithExpr
     deriving Show
 
 data ArithOperator 
-    = Times | Div | Mod | Plus | Minus
+    = Times 
+    | Div 
+    | Mod 
+    | Plus 
+    | Minus
     deriving Show
 
 evalAExpr :: ArithExpr -> State -> Int -- Semantische Funktion
@@ -41,12 +45,18 @@ evalAOperator Plus  = (+)
 evalAOperator Minus = (-)
 
 data RelOperator 
-    = LessEq
+    = Equals
+    | Less
+    | LessEq
+    | Greater
     | GreaterEq
     deriving Show
 
 evalROpr :: RelOperator -> (Value -> Value -> Bool)
+evalROpr Equals = (==)
+evalROpr Less = (<)
 evalROpr LessEq = (<=)
+evalROpr Greater = (>)
 evalROpr GreaterEq = (>=)
 
 data BoolExpr
@@ -65,6 +75,7 @@ data Command
     = AssiCmd Ident ArithExpr
     | CpsCmd [Command]
     | WhileCmd BoolExpr Command
+    | CondCmd BoolExpr Command Command
     deriving Show
 
 interCmd :: Command -> State -> State
@@ -76,18 +87,22 @@ interCmd (AssiCmd ident expr) state =
 interCmd (CpsCmd cmds) state = 
     foldl (flip interCmd) state cmds 
 
-interCmd (WhileCmd guard repetend) state
+interCmd (WhileCmd guard repetend) state 
     | evalBExpr guard state =
        interCmd (WhileCmd guard repetend) state'
     | otherwise = state
        where state' = interCmd repetend state
 
 
+interCmd (CondCmd branch ifBranch elseBranch) state  
+    | evalBExpr branch state = interCmd ifBranch state
+    | otherwise = interCmd elseBranch state
+
 state175 "m" = 17
 state175 "n" = 5
 state175 _ = 0
 
-stateOut = interCmd divProg state175
+-- stateOut = interCmd divProg state175
 
 -- (2 + 3 ) * 4
 ae1, ae2 :: ArithExpr
