@@ -1,0 +1,1 @@
+data D = C0 | C1 D | C2 D D
