@@ -1,0 +1,23 @@
+plugins {
+    id 'scala'
+}
+
+repositories {
+    jcenter()
+}
+
+// sourceCompatibility = 1.8
+
+dependencies {
+    compile 'org.scala-lang:scala-library:2.12.3'
+}
+
+task zip(type: Zip) {
+    from projectDir
+    
+    include 'build.gradle'
+	include '.classpath'
+	include '.project'
+	
+	include 'src/main/scala/**'
+}
